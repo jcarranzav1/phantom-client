@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../style/buttons';
 import { minWidth } from '../style/responsive';
 
@@ -164,7 +165,7 @@ const DotButton = styled.div`
 export default function Carousel() {
   const [change, setChange] = useState(false);
   const [showDots, setShowDots] = useState({ dot1: true, dot2: false });
-
+  const navigate = useNavigate();
   return (
     <Container>
       <Wrapper>
@@ -192,7 +193,7 @@ export default function Carousel() {
                           Phantom has a very large community that always supports us to keep
                           growing.
                         </ItemText>
-                        <Button>Shop Now</Button>
+                        <Button onClick={() => navigate('/products/case')}>Shop Now</Button>
                       </ItemLeft>
                       <ItemRight>
                         <Image src="https://www.nitro-pc.es/blog/wp-content/uploads/2017/11/elite-1.png" />
@@ -211,7 +212,7 @@ export default function Carousel() {
                           Enjoy this offer, buying the best components for your PC Gamer. Hurry up,
                           it will be over soon.
                         </ItemText>
-                        <Button>Shop Now</Button>
+                        <Button onClick={() => navigate('/products/case')}>Shop Now</Button>
                       </ItemLeft>
                       <ItemRight>
                         <Image src="https://m.media-amazon.com/images/I/91XyrUFYKfL._AC_SX679_.jpg" />
