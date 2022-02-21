@@ -1,9 +1,9 @@
-/* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SingInSchema } from '../../schemas/formSchemas';
 import {
   AccountOption,
@@ -18,8 +18,14 @@ import {
   LabelForm,
 } from '../../style/forms';
 import { Button } from '../../style/buttons';
+import { LOGIN } from '../../apollo/user.querys';
+import { useDispatch } from '../../store/authStore';
+import { types } from '../../types/types';
 
 const SignInModal = ({ show, setShow }) => {
+  const [mutateFunction, { data, error }] = useMutation(LOGIN);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [border, setBorder] = useState({ border1: '', border2: '' });
   const [showEye, setShowEye] = useState(false);
   const { border1, border2 } = border;
@@ -37,8 +43,20 @@ const SignInModal = ({ show, setShow }) => {
     },
   });
 
-  function OnSubmit(dataForm) {
-    console.log(dataForm);
+  useEffect(() => {
+    if (data) {
+      const action = {
+        type: types.userSignin,
+        payload: data.loginUser,
+      };
+      dispatch(action);
+      navigate('/');
+      setShow(false);
+    }
+  }, [data, dispatch, navigate, setShow]);
+
+  async function OnSubmit(dataForm) {
+    await mutateFunction({ variables: { input: dataForm } });
   }
   return (
     <Modal onHide={handleClose} show={show} centered>
@@ -61,6 +79,9 @@ const SignInModal = ({ show, setShow }) => {
               />
             </InputWrapper>
             <ErrorMessage className="my-0 mt-2 ">{errors.email?.message}</ErrorMessage>
+            {error && (
+              <ErrorMessage className="my-0 mt-2 ">Error en el email o contraseña</ErrorMessage>
+            )}
           </FormControl>
         </div>
         <div className="mb-4">
@@ -102,6 +123,9 @@ const SignInModal = ({ show, setShow }) => {
               </EyeButton>
             </InputWrapper>
             <ErrorMessage className="my-0 mt-2">{errors.password?.message}</ErrorMessage>
+            {error && (
+              <ErrorMessage className="my-0 mt-2 ">Error en el email o contraseña</ErrorMessage>
+            )}
           </FormControl>
         </div>
         <Button type="submit" large>
@@ -111,6 +135,12 @@ const SignInModal = ({ show, setShow }) => {
           <div>Don&apos;t have account?</div>
           <Link to="/signup">
             <AccountOption>Sign Up</AccountOption>
+          </Link>
+        </AccountOptionContainer>
+        <AccountOptionContainer>
+          <div>You&apos;re a admin?</div>
+          <Link to="/admin/signin">
+            <AccountOption>Click Here</AccountOption>
           </Link>
         </AccountOptionContainer>
       </Form>

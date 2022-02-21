@@ -1,10 +1,11 @@
 export const colorStyles = {
+  menuPortal: (base) => ({ ...base, zIndex: 99999 }),
   control: (styles) => ({
     ...styles,
     backgroundColor: 'white',
     fontSize: '14px',
     ':hover': { border: '1px solid black' },
-    width: '180px',
+    width: '100%',
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => ({
     ...styles,

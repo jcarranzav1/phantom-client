@@ -33,7 +33,7 @@
         "argsIgnorePattern": "next|res"
       }
     ],
-    "max-len": ["error", { "code": 180 }],
+    "max-len": "off",
     "implicit-arrow-linebreak": "off",
     "camelcase": [
       2,
@@ -102,7 +102,10 @@
     "react/jsx-wrap-multilines": ["warn"],
     "react/sort-prop-types": ["error"],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/label-has-for": "off",
+    "default-param-last": "off"
   },
 
   "globals": {

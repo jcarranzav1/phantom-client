@@ -1,10 +1,11 @@
-/* eslint-disable max-len */
+import { useMutation } from '@apollo/client';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { SINGUP } from '../apollo/user.querys';
 import { SingUpSchema } from '../schemas/formSchemas';
 import { Button } from '../style/buttons';
 import {
@@ -19,12 +20,12 @@ import {
   InputWrapper,
   LabelForm,
 } from '../style/forms';
+import { maxWidth } from '../style/responsive';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-
   align-items: center;
   background-color: #f6f9fc;
   justify-content: center;
@@ -37,9 +38,23 @@ const Wrapper = styled.div`
   overflow: hidden;
   border-radius: 8px;
   width: 500px;
+  ${maxWidth(550, {
+    maxWidth: '500px',
+    width: 'auto',
+  })}
 `;
 
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  ${maxWidth(550, {
+    flexDirection: 'column',
+    gap: '0px',
+  })}
+`;
 export default function Register() {
+  const navigate = useNavigate();
   const [border, setBorder] = useState({
     border1: '',
     border2: '',
@@ -64,9 +79,15 @@ export default function Register() {
       password: '',
     },
   });
+  const [mutateFunction, { data, error }] = useMutation(SINGUP);
+  useEffect(() => {
+    if (data) {
+      navigate('/signin');
+    }
+  }, [data, navigate]);
 
-  function OnSubmit(dataForm) {
-    console.log(dataForm);
+  async function OnSubmit(dataForm) {
+    await mutateFunction({ variables: { input: dataForm } });
   }
   return (
     <Container>
@@ -122,6 +143,11 @@ export default function Register() {
                 />
               </InputWrapper>
               <ErrorMessage className="my-0 mt-2 ">{errors.email?.message}</ErrorMessage>
+              {error && (
+                <ErrorMessage className="my-0 mt-2 ">
+                  Ya estas registrado con este correo
+                </ErrorMessage>
+              )}
             </FormControl>
           </div>
           <div className="mb-4">
@@ -208,9 +234,15 @@ export default function Register() {
               </ErrorMessage>
             </FormControl>
           </div>
-          <Button type="submit" large>
-            Login
-          </Button>
+          <ButtonsContainer>
+            <Button type="submit" large>
+              Create Account
+            </Button>
+            <Button onClick={() => navigate('/')} type="button" large>
+              Return Home
+            </Button>
+          </ButtonsContainer>
+
           <AccountOptionContainer>
             <div>You have account?</div>
             <Link to="/signin">

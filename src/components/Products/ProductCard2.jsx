@@ -1,8 +1,8 @@
-/* eslint-disable max-len */
 import styled from '@emotion/styled';
 import React from 'react';
 import Ripples from 'react-ripples';
 import { Link } from 'react-router-dom';
+import { useCartActions } from '../../store/cart/cartStore';
 import { minWidth } from '../../style/responsive';
 
 const Container = styled.div`
@@ -198,7 +198,7 @@ const CartIcon = styled.svg`
   flex-shrink: 0;
   transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   font-size: 1.45rem;
-  z-index: 10000000000;
+  z-index: 10;
 `;
 
 const SideContainer = styled.div`
@@ -274,14 +274,19 @@ const CartSideContainer = styled.div`
   flex-direction: column;
 `;
 
-export default function ProductCard2({ id, url, model, price }) {
+export default function ProductCard2({ id, photo, model, price }) {
+  const { addProduct } = useCartActions();
+
+  const handleAdd = () => {
+    addProduct({ id, model, price, photo });
+  };
   return (
     <Container>
       <Wrapper>
         <ImageContainer>
           <div>
             <Link to={`/products/${id}`}>
-              <Image src={url} />
+              <Image src={photo} />
             </Link>
           </div>
         </ImageContainer>
@@ -311,13 +316,13 @@ export default function ProductCard2({ id, url, model, price }) {
             </RatingContainer>
             <PriceContainer>
               <PriceTitle>Price: </PriceTitle>
-              <Price>${price}</Price>
+              <Price>${price.toFixed(2)}</Price>
             </PriceContainer>
 
             <CartBodyContainer>
               <CartBodyWrapper>
                 <Ripples color="#e07385" during={800}>
-                  <CartButton>
+                  <CartButton onClick={handleAdd}>
                     <CartIcon>
                       <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </CartIcon>
@@ -336,7 +341,7 @@ export default function ProductCard2({ id, url, model, price }) {
             </HeartButton>
             <CartSideContainer>
               <Ripples color="#e07385" during={800}>
-                <CartButton>
+                <CartButton onClick={handleAdd}>
                   <CartIcon>
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                   </CartIcon>

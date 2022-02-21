@@ -31,7 +31,6 @@ const Wrapper = styled.div`
   margin-top: -24px;
   width: calc(100% + 24px);
   margin-left: -24px;
-  min-height: 500px;
 `;
 
 export default function ProductList({ productArray }) {

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import Ripples from 'react-ripples';
 import { Link } from 'react-router-dom';
+import { useCartActions } from '../../store/cart/cartStore';
 
 const Container = styled.div`
   display: flex;
@@ -169,39 +169,38 @@ const CloseButton = styled.button`
   padding: 5px;
   font-size: 1.125rem;
 `;
-export const CartCard = ({ id, url, model, price }) => {
-  console.log('ra');
+export const CartCard = ({ id, photo, model, price, quantity }) => {
+  const { increase, decrease, removeProduct } = useCartActions();
   return (
     <Container>
       <ButtonContainer>
-        <Ripples color="#d8455dad" during={800}>
-          <ButtonTop>
-            <ButtonIcon>
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-            </ButtonIcon>
-          </ButtonTop>
-        </Ripples>
-        <Number>3</Number>
-        <Ripples color="#d8455dad" during={800}>
-          <ButtonBottom block={false}>
-            <ButtonIcon>
-              <path d="M19 13H5v-2h14v2z" />
-            </ButtonIcon>
-          </ButtonBottom>
-        </Ripples>
+        <ButtonTop onClick={() => increase({ id })}>
+          <ButtonIcon>
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </ButtonIcon>
+        </ButtonTop>
+        <Number>{quantity}</Number>
+        <ButtonBottom
+          block={quantity === 1}
+          disabled={quantity === 1}
+          onClick={() => decrease({ id })}>
+          <ButtonIcon>
+            <path d="M19 13H5v-2h14v2z" />
+          </ButtonIcon>
+        </ButtonBottom>
       </ButtonContainer>
       <Link to={`/products/${id}`}>
         <ImgContainer>
-          <Imagen alt="product" src={url} />
+          <Imagen alt="product" src={photo} />
         </ImgContainer>
       </Link>
       <div style={{ flex: '1 1 0' }}>
-        <Link style={{ 'text-decoration': 'none', color: 'inherit' }} to={`/products/${id}`}>
+        <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/products/${id}`}>
           <Model>{model}</Model>
         </Link>
-        <Price>${price}</Price>
+        <Price>${price.toFixed(2)}</Price>
       </div>
-      <CloseButton>
+      <CloseButton onClick={() => removeProduct({ id })}>
         <ButtonIcon>
           <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
         </ButtonIcon>

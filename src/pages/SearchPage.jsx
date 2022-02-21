@@ -1,19 +1,20 @@
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
 import Select from 'react-select';
 import Ripples from 'react-ripples';
+import { useQuery } from '@apollo/client';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
 import { minWidth } from '../style/responsive';
 import { sortBy } from '../data/categoryData';
 import { colorStyles } from '../style/select';
-import { PrettoSlider } from '../style/slider';
 import ProductList from '../components/Products/ProductList';
-import { productsArray } from '../data/productsData';
 import ProductList2 from '../components/Products/ProductList2';
+import { getAllProducts } from '../apollo/product.querys';
+import { FilterProductSearch, SortProducts } from '../utils/utils';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -72,22 +73,6 @@ const SearchinResults = styled.p`
   margin-top: 5px;
   font-size: 14px;
   color: #7d879c;
-  text-transform: none;
-  white-space: normal;
-`;
-const PriceFilter = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1 1 0;
-`;
-
-const PriceTitle = styled.p`
-  margin-bottom: 0px;
-  margin-top: 0px;
-  font-size: 14px;
-  color: #7d879c;
-  margin-right: 16px;
-  white-space: pre;
   text-transform: none;
   white-space: normal;
 `;
@@ -179,23 +164,22 @@ const ViewIcons = styled.svg`
 `;
 
 export default function SearchPage() {
-  const [value, setValue] = useState([10, 4000]);
+  const { data } = useQuery(getAllProducts);
+  const [productArray, setProductArray] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
-  const { product = '' } = queryString.parse(location.search);
-  const [viewStatus, setViewStatus] = useState({ view1: true, view2: false });
 
-  const handleSliderChange = (event, newValue) => {
-    const query = queryString.parse(location.search);
-    navigate(
-      `?${queryString.stringify({ ...query, priceMax: newValue[1], priceMin: newValue[0] })}`,
-    );
-    setValue(newValue);
-  };
+  const [viewStatus, setViewStatus] = useState({ view1: true, view2: false });
+  const query = queryString.parse(location.search);
+  const { product = '', order = '' } = query;
+
+  useEffect(() => {
+    if (data) {
+      setProductArray(SortProducts(FilterProductSearch(data.products, product), order));
+    }
+  }, [data, product, order]);
 
   const handleChange = (options) => {
-    const query = queryString.parse(location.search);
-
     if (options.value === 'low') navigate(`?${queryString.stringify({ ...query, order: 'asc' })}`);
     else if (options.value === 'high')
       navigate(`?${queryString.stringify({ ...query, order: 'desc' })}`);
@@ -211,31 +195,33 @@ export default function SearchPage() {
           <FilterContainer>
             <div>
               <SearchinText>Searching for “ {product} ”</SearchinText>
-              <SearchinResults>48 results found</SearchinResults>
+              <SearchinResults>{productArray.length} results found</SearchinResults>
             </div>
-            <div>
+            {/*  <div>
               <PriceFilter>
                 <PriceTitle>Price Range:</PriceTitle>
                 <PrettoSlider
-                  max={4000}
-                  min={10}
+                  max={3000}
+                  min={0}
                   onChange={handleSliderChange}
-                  step={10}
+                  step={50}
                   value={value}
                   valueLabelDisplay="auto"
                   valueLabelFormat={(value) => `$${value}`}
                 />
               </PriceFilter>
-            </div>
+            </div> */}
             <FilterOption>
               <SortBy>
                 <SortByText>Sort By:</SortByText>
-                <Select
-                  defaultValue=""
-                  onChange={(options) => handleChange(options)}
-                  options={sortBy}
-                  styles={colorStyles}
-                />
+                <div style={{ width: '180px' }}>
+                  <Select
+                    defaultValue=""
+                    onChange={(options) => handleChange(options)}
+                    options={sortBy}
+                    styles={colorStyles}
+                  />
+                </div>
               </SortBy>
               <ViewContainer>
                 <ViewTitle>View:</ViewTitle>
@@ -260,9 +246,9 @@ export default function SearchPage() {
           </FilterContainer>
         </div>
         {viewStatus.view1 ? (
-          <ProductList productArray={productsArray} />
+          <ProductList productArray={productArray} />
         ) : (
-          <ProductList2 productArray={productsArray} />
+          <ProductList2 productArray={productArray} />
         )}
       </Container>
       <Footer />

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-
 import Badge from '@mui/material/Badge';
 import Search from '@mui/icons-material/Search';
+import queryString from 'query-string';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import { Link, useNavigate } from 'react-router-dom';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Dropdown, DropdownButton, NavDropdown } from 'react-bootstrap';
+import { useApolloClient } from '@apollo/client';
 import SignInModal from './Modals/SignInModal';
 import { maxWidth, minWidth } from '../style/responsive';
 import CartModal from './Modals/CartModal';
+import { useDispatch, useSelector } from '../store/authStore';
+import { types } from '../types/types';
+import { useCartActions, useCartSelector } from '../store/cart/cartStore';
 
 const Container = styled.div`
   width: 100%;
@@ -160,8 +164,64 @@ const Right = styled.div`
   flex: 1;
   align-items: center;
   justify-content: flex-end;
+  & .dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    outline: 0;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    user-select: none;
+    vertical-align: middle;
+    text-decoration: none;
+    border-radius: 50%;
+    overflow: visible;
+    color: rgba(0, 0, 0, 0.54);
+    margin-left: 16px;
+    padding: 10px !important ;
+    background-color: #f3f5f9;
+    font-size: 14px;
+    margin-left: 25px;
+    ${maxWidth(380, { fontSize: '12px', marginLeft: '10px' })}
+    &:hover {
+      & svg {
+        width: 1.05em;
+        height: 1.05em;
+      }
+      box-shadow: rgba(3, 0, 71, 0.1) 0px 1px 3px;
+    }
+  }
+  & .dropdown-toggle {
+    padding: 0;
+    color: rgba(0, 0, 0, 0.54);
+    &::after {
+      display: none;
+    }
+  }
   ${minWidth(0, { display: 'none' })}
   ${minWidth(768, { display: 'flex' })}
+
+  & .dropdown-menu {
+    padding: 0;
+    max-width: 20px;
+  }
+  & .dropdown-item {
+    padding: 0;
+    padding: 0.72rem;
+    color: #4b556b;
+
+    transition: background-color 0.2s ease;
+    &:hover {
+      background-color: #1f51ff;
+      color: white;
+      font-weight: 600;
+    }
+  }
 `;
 
 const MenuItem = styled.button`
@@ -195,30 +255,50 @@ const MenuItem = styled.button`
     }
     box-shadow: rgba(3, 0, 71, 0.1) 0px 1px 3px;
   }
-  /*  & svg {
-    &:hover {
-      width: 1.1em;
-      height: 1.1em;
-    }
-  } */
 `;
 
+/* const ImageProfile = styled.img`
+  border-radius: 50%;
+  height: 44px;
+  width: 44px;
+  text-align: center;
+  object-fit: cover;
+`; */
 export const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [border, setBorder] = useState('');
+
+  const client = useApolloClient();
   const [filterShow, setFilterShow] = useState(false);
+  const userData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const cartArray = useCartSelector((state) => state.cartItems);
+  const { clearCart } = useCartActions();
+
   const handleFilterOpen = () => setFilterShow(true);
 
   const [shopCart, setShopCart] = useState(false);
   const handleShopCartOpen = () => setShopCart(true);
 
+  const query = queryString.parse(location.search);
   const handleSubmit = (e) => {
     e.preventDefault();
     const text = e.target.search.value;
 
-    if (text.length > 2) navigate(`/products/search?product=${text.toLowerCase()}`);
+    if (text.length > 1)
+      navigate(
+        `/products/search?${queryString.stringify({ ...query, product: text.toLowerCase() })}`,
+      );
   };
-
+  const onSignOut = async () => {
+    dispatch({ type: types.userSignout });
+    await client.clearStore();
+    client.cache.gc();
+    clearCart();
+    navigate('/signin');
+  };
   return (
     <Container>
       <Wrapper>
@@ -242,7 +322,7 @@ export const NavBar = () => {
                   <Dropdown.Item
                     as="button"
                     className="dropdownItems"
-                    onClick={() => navigate('/products/case')}>
+                    onClick={() => navigate('/products/pc_case')}>
                     PC Case
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -254,14 +334,8 @@ export const NavBar = () => {
                   <Dropdown.Item
                     as="button"
                     className="dropdownItems"
-                    onClick={() => navigate('/products/monitors')}>
+                    onClick={() => navigate('/products/monitor')}>
                     Monitors
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as="button"
-                    className="dropdownItems"
-                    onClick={() => navigate('/products/cpu')}>
-                    CPU
                   </Dropdown.Item>
                   <Dropdown.Item
                     as="button"
@@ -281,14 +355,26 @@ export const NavBar = () => {
           </form>
         </Center>
         <Right>
-          <MenuItem onClick={handleFilterOpen} type="button">
-            <PersonOutlineIcon />
-          </MenuItem>
           <MenuItem onClick={handleShopCartOpen} type="button">
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={cartArray.length} color="primary">
               <ShoppingCartOutlined />
             </Badge>
           </MenuItem>
+          {userData ? (
+            <NavDropdown
+              id="basic-nav-dropdown"
+              style={{ marginLeft: '25px' }}
+              title={<PersonOutlineIcon />}>
+              <NavDropdown.Item as={Link} className="dropItem" to="/profile">
+                Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
+            </NavDropdown>
+          ) : (
+            <MenuItem onClick={handleFilterOpen} type="button">
+              <PersonOutlineIcon />
+            </MenuItem>
+          )}
         </Right>
       </Wrapper>
       <SignInModal setShow={setFilterShow} show={filterShow} />

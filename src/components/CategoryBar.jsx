@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import styled from '@emotion/styled';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,8 +6,6 @@ import pc from '../assets/pc.png';
 import pcOn from '../assets/pc_on.png';
 import monitor from '../assets/monitor.png';
 import monitorOn from '../assets/monitor_on.png';
-import cpu from '../assets/cpu.png';
-import cpuOn from '../assets/cpu_on.png';
 import graphicsCard from '../assets/graphics-card.png';
 import graphicsCardOn from '../assets/graphics-card_on.png';
 import laptop from '../assets/laptop.png';
@@ -59,24 +56,21 @@ export default function CategoryBar() {
 
   return (
     <Container>
-      <Item className="ms-auto" onClick={() => navigate('/products/case')}>
-        <Icon src={category === 'case' ? pcOn : pc} />
+      <Item className="ms-auto" onClick={() => navigate('/products/pc_case')}>
+        <Icon src={category === 'pc_case' ? pcOn : pc} />
         <Title>PC Case</Title>
       </Item>
       <Item onClick={() => navigate('/products/laptop')}>
         <Icon src={category === 'laptop' ? laptopOn : laptop} />
         <Title>Laptop</Title>
       </Item>
-      <Item onClick={() => navigate('/products/cpu')}>
-        <Icon src={category === 'cpu' ? cpuOn : cpu} />
-        <Title>CPU</Title>
-      </Item>
+
       <Item onClick={() => navigate('/products/graphics_card')}>
         <Icon src={category === 'graphics_card' ? graphicsCardOn : graphicsCard} />
         <Title>Graphics Card</Title>
       </Item>
-      <Item onClick={() => navigate('/products/monitors')}>
-        <Icon src={category === 'monitors' ? monitorOn : monitor} />
+      <Item onClick={() => navigate('/products/monitor')}>
+        <Icon src={category === 'monitor' ? monitorOn : monitor} />
         <Title>Monitors</Title>
       </Item>
       <Item className="me-auto" onClick={() => navigate('/products/headphones')}>

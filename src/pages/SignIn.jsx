@@ -1,11 +1,14 @@
-/* eslint-disable max-len */
+import { useMutation } from '@apollo/client';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { LOGIN } from '../apollo/user.querys';
 import { SingInSchema } from '../schemas/formSchemas';
+import { useDispatch } from '../store/authStore';
 import { Button } from '../style/buttons';
 import {
   AccountOption,
@@ -19,6 +22,8 @@ import {
   InputWrapper,
   LabelForm,
 } from '../style/forms';
+import { maxWidth } from '../style/responsive';
+import { types } from '../types/types';
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +31,6 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #f6f9fc;
   align-items: center;
-
   justify-content: center;
 `;
 const Wrapper = styled.div`
@@ -37,9 +41,26 @@ const Wrapper = styled.div`
   overflow: hidden;
   border-radius: 8px;
   width: 500px;
+  ${maxWidth(550, {
+    maxWidth: '500px',
+    width: 'auto',
+  })}
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  ${maxWidth(550, {
+    flexDirection: 'column',
+    gap: '0px',
+  })}
 `;
 
 export default function SignIn() {
+  const [mutateFunction, { data, error }] = useMutation(LOGIN);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [border, setBorder] = useState({ border1: '', border2: '' });
   const [showEye, setShowEye] = useState(false);
   const { border1, border2 } = border;
@@ -55,8 +76,19 @@ export default function SignIn() {
     },
   });
 
-  function OnSubmit(dataForm) {
-    console.log(dataForm);
+  useEffect(() => {
+    if (data) {
+      const action = {
+        type: types.userSignin,
+        payload: data.loginUser,
+      };
+      dispatch(action);
+      navigate('/');
+    }
+  }, [data, dispatch, navigate]);
+
+  async function OnSubmit(dataForm) {
+    await mutateFunction({ variables: { input: dataForm } });
   }
   return (
     <Container>
@@ -80,6 +112,9 @@ export default function SignIn() {
                 />
               </InputWrapper>
               <ErrorMessage className="my-0 mt-2 ">{errors.email?.message}</ErrorMessage>
+              {error && (
+                <ErrorMessage className="my-0 mt-2 ">Error en el email o contraseña</ErrorMessage>
+              )}
             </FormControl>
           </div>
           <div className="mb-4">
@@ -121,15 +156,30 @@ export default function SignIn() {
                 </EyeButton>
               </InputWrapper>
               <ErrorMessage className="my-0 mt-2">{errors.password?.message}</ErrorMessage>
+              {error && (
+                <ErrorMessage className="my-0 mt-2 ">Error en el email o contraseña</ErrorMessage>
+              )}
             </FormControl>
           </div>
-          <Button type="submit" large>
-            Login
-          </Button>
+          <ButtonsContainer>
+            <Button type="submit" large>
+              Login
+            </Button>
+            <Button onClick={() => navigate('/')} type="button" large>
+              Return Home
+            </Button>
+          </ButtonsContainer>
+
           <AccountOptionContainer>
             <div>Don&apos;t have account?</div>
             <Link to="/signup">
               <AccountOption>Sign Up</AccountOption>
+            </Link>
+          </AccountOptionContainer>
+          <AccountOptionContainer>
+            <div>You&apos;re a admin?</div>
+            <Link to="/admin/signin">
+              <AccountOption>Click Here</AccountOption>
             </Link>
           </AccountOptionContainer>
         </Form>

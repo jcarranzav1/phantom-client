@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 import styled from '@emotion/styled';
 import React from 'react';
-import Ripples from 'react-ripples';
 import { Link } from 'react-router-dom';
+import { useCartActions } from '../../store/cart/cartStore';
 
 const Container = styled.div`
   color: #2b3445;
@@ -30,15 +29,9 @@ const Model = styled.span`
   font-size: 18px;
   font-weight: 600;
   line-height: 1.5;
-  white-space: nowrap;
-  overflow: hidden;
+  white-space: wrap;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
-`;
-
-const CloseContainer = styled.div`
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
 `;
 
 const CloseButton = styled.button`
@@ -70,6 +63,7 @@ const CloseButton = styled.button`
   font-size: 1.125rem;
   padding: 5px;
   margin-left: 12px;
+  margin-top: -4px;
   &:hover {
     background-color: rgba(0, 0, 0, 0.04);
   }
@@ -84,7 +78,7 @@ const CloseIcon = styled.svg`
   flex-shrink: 0;
   transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   font-size: 1.5rem;
-  z-index: 10000000000;
+  z-index: 10;
 `;
 
 const PriceContainer = styled.div`
@@ -104,7 +98,7 @@ const PriceUnit = styled.span`
   margin-right: 8px;
   text-transform: none;
   white-space: normal;
-  font-size: 14px;
+  font-size: 16px;
 `;
 const PriceTotal = styled.span`
   line-height: 1.5;
@@ -113,7 +107,7 @@ const PriceTotal = styled.span`
   margin-right: 16px;
   text-transform: none;
   white-space: normal;
-  font-size: 14px;
+  font-size: 16px;
 `;
 
 const PriceRight = styled.div`
@@ -210,42 +204,48 @@ const Number = styled.div`
   margin-bottom: 3px;
 `;
 
-export default function ShopCartCard({ id, url, model, price }) {
+export default function ShopCartCard({ id, photo, model, price, quantity }) {
+  const { increase, decrease, removeProduct } = useCartActions();
   return (
     <Container>
-      <img alt="products" height="140px" src={url} width="140px" />
+      <img alt="products" height="140px" src={photo} width="140px" />
       <Body>
-        <Link to={`/products/${id}`}>
-          <Model>{model}</Model>
-        </Link>
-        <CloseContainer>
-          <CloseButton>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Link to={`/products/${id}`}>
+            <Model>{model}</Model>
+          </Link>
+
+          <CloseButton onClick={() => removeProduct({ id })}>
             <CloseIcon>
               <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
             </CloseIcon>
           </CloseButton>
-        </CloseContainer>
+        </div>
+
         <PriceContainer>
           <PriceLeft>
-            <PriceUnit>${price}.00 x 3</PriceUnit>
-            <PriceTotal>${price}.00</PriceTotal>
+            <PriceUnit>
+              ${price.toFixed(2)} x {quantity}
+            </PriceUnit>
+            <PriceTotal>${(price * quantity).toFixed(2)}</PriceTotal>
           </PriceLeft>
           <PriceRight>
-            <Ripples color="#d8455dad" during={800}>
-              <ButtonLeft>
-                <ButtonIcon>
-                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                </ButtonIcon>
-              </ButtonLeft>
-            </Ripples>
-            <Number>3</Number>
-            <Ripples color="#d8455dad" during={800}>
-              <ButtonRight block={false}>
-                <ButtonIcon>
-                  <path d="M19 13H5v-2h14v2z" />
-                </ButtonIcon>
-              </ButtonRight>
-            </Ripples>
+            <ButtonLeft onClick={() => increase({ id })}>
+              <ButtonIcon>
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </ButtonIcon>
+            </ButtonLeft>
+
+            <Number>{quantity}</Number>
+
+            <ButtonRight
+              block={quantity === 1}
+              disabled={quantity === 1}
+              onClick={() => decrease({ id })}>
+              <ButtonIcon>
+                <path d="M19 13H5v-2h14v2z" />
+              </ButtonIcon>
+            </ButtonRight>
           </PriceRight>
         </PriceContainer>
       </Body>

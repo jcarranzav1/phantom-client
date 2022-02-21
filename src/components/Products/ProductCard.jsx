@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Ripples from 'react-ripples';
 import { minWidth } from '../../style/responsive';
+import { useCartActions } from '../../store/cart/cartStore';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -178,9 +179,15 @@ const CartIcon = styled.svg`
   flex-shrink: 0;
   transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   font-size: 1.45rem;
-  z-index: 100000000000000;
+  z-index: 10;
 `;
-export default function ProductCard({ id, url, model, price }) {
+export default function ProductCard({ id, photo, model, price }) {
+  const { addProduct } = useCartActions();
+
+  const handleAdd = () => {
+    addProduct({ id, model, price, photo });
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -188,11 +195,11 @@ export default function ProductCard({ id, url, model, price }) {
           <ImageContainer>
             <ImageWrapper />
             <Link to={`/products/${id}`}>
-              <Image src={url} />
+              <Image src={photo} />
             </Link>
           </ImageContainer>
         </div>
-        <div style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem', paddingTop: '2rem' }}>
           <div className="d-flex">
             <div style={{ flex: '1 1 0', minWidth: '0%', marginRight: '8px' }}>
               <Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/products/${id}`}>
@@ -200,12 +207,12 @@ export default function ProductCard({ id, url, model, price }) {
               </Link>
               <PriceContainer>
                 <PriceTitle>Price: </PriceTitle>
-                <Price>${price}</Price>
+                <Price>${price.toFixed(2)}</Price>
               </PriceContainer>
             </div>
             <CartContainer>
               <Ripples color="#e07385" during={800}>
-                <CartButton>
+                <CartButton onClick={handleAdd}>
                   <CartIcon>
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                   </CartIcon>

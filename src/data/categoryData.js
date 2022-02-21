@@ -1,10 +1,10 @@
 export const categories = [
   { value: '', label: 'None' },
+  { value: 'pc_case', label: 'PC Case' },
   { value: 'monitor', label: 'Monitor' },
   { value: 'laptop', label: 'Laptop' },
   { value: 'headphones', label: 'Headphones' },
-  { value: 'cpu', label: 'CPU' },
-  { value: 'graphic_cards', label: 'Graphics Cards' },
+  { value: 'graphics_card', label: 'Graphics Card' },
 ];
 
 export const sortBy = [

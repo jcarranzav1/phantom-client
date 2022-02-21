@@ -1,13 +1,20 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import StripeCheckout from 'react-stripe-checkout';
+import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
 import ShopCartCard from '../components/Products/ShopCartCard';
-import { productsArray } from '../data/productsData';
+import { useCartSelector } from '../store/cart/cartStore';
 import { Button } from '../style/buttons';
 import { minWidth } from '../style/responsive';
+import { STRIPE_KEY } from '../session/consts';
+import { PAYMENT } from '../apollo/payment.querys';
+import { useDispatch } from '../store/authStore';
+import { types } from '../types/types';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -118,6 +125,49 @@ const BreakLine = styled.hr`
   margin-bottom: 1rem;
 `;
 export default function Cart() {
+  const cartArray = useCartSelector((state) => state.cartItems);
+  const total = useCartSelector((state) => state.total);
+  const [paymentMutation, { data }] = useMutation(PAYMENT);
+  const [stripeToken, setStripeToken] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const paymentCall = async () => {
+      try {
+        await paymentMutation({
+          variables: {
+            input: {
+              tokenId: stripeToken.id,
+              amount: parseFloat(total),
+            },
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (stripeToken) {
+      paymentCall();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stripeToken]);
+
+  useEffect(() => {
+    if (data) {
+      const { city, line1, country, postalCode } = data.payment;
+      const action = {
+        type: types.update,
+        payload: { city, addres: line1, country, postalCode },
+      };
+      dispatch(action);
+      navigate('/success');
+    }
+  }, [data, dispatch, navigate]);
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
   return (
     <>
       <Announcement />
@@ -125,7 +175,7 @@ export default function Cart() {
       <Container>
         <Wrapper>
           <Left>
-            {productsArray.map((products) => (
+            {cartArray.map((products) => (
               <ShopCartCard key={uuidv4()} {...products} />
             ))}
           </Left>
@@ -134,13 +184,22 @@ export default function Cart() {
               <PriceContainer>
                 <PriceTitle>Total: </PriceTitle>
                 <div className="d-flex align-items-end">
-                  <Price>$1250.00</Price>
+                  <Price>${total}</Price>
                 </div>
               </PriceContainer>
               <BreakLine />
-              <Button className="mt-2" large outline>
-                Checkout Now
-              </Button>
+              <StripeCheckout
+                amount={parseFloat(total)}
+                description={`Your total is $${total}`}
+                image="https://i.pinimg.com/originals/cd/2d/69/cd2d69fb186590d7a684f805dc64a3c1.jpg"
+                name="Phantom"
+                stripeKey={STRIPE_KEY}
+                token={onToken}
+                billingAddress>
+                <Button className="mt-2" large outline>
+                  Checkout Now
+                </Button>
+              </StripeCheckout>
             </RightWrapper>
           </Right>
         </Wrapper>
