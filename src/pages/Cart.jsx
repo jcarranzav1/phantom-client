@@ -15,6 +15,7 @@ import { STRIPE_KEY } from '../session/consts';
 import { PAYMENT } from '../apollo/payment.querys';
 import { useDispatch } from '../store/authStore';
 import { types } from '../types/types';
+import CartIndex from '../components/Products/CartIndex';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -90,7 +91,7 @@ const RightWrapper = styled.div`
   color: #2b3445;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
-  box-shadow: 0px 1px 3px rgb(3 0 71 / 9%);
+  box-shadow: 0px 1px 3px rgba(3, 0, 71, 0.09);
   overflow: hidden;
   border-radius: 8px;
   padding: 1.5rem 1.75rem;
@@ -173,6 +174,7 @@ export default function Cart() {
       <Announcement />
       <NavBar />
       <Container>
+        <CartIndex state={1} />
         <Wrapper>
           <Left>
             {cartArray.map((products) => (

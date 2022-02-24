@@ -3,14 +3,15 @@ import styled from '@emotion/styled';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import Announcement from '../components/Announcement';
-import Footer from '../components/Footer';
-import { NavBar } from '../components/NavBar';
-import { Button } from '../style/buttons';
-import { UDPATE_PROFILE } from '../apollo/user.querys';
-import { useDispatch, useSelector } from '../store/authStore';
-import { types } from '../types/types';
-import UserProfile from '../components/Profile/UserProfile';
+import { PropagateLoader } from 'react-spinners';
+import Announcement from '../../components/Announcement';
+import Footer from '../../components/Footer';
+import { NavBar } from '../../components/NavBar';
+import { Button } from '../../style/buttons';
+import { UDPATE_PROFILE } from '../../apollo/user.querys';
+import { useDispatch, useSelector } from '../../store/authStore';
+import { types } from '../../types/types';
+import AdminProfile from '../../components/Profile/AdminProfile';
 
 const BodyContainer = styled.div`
   background-color: #fff;
@@ -88,10 +89,11 @@ const Label = styled.small`
   white-space: normal;
 `;
 export default function UpdateProfile() {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
 
-  const [mutateFunction, { data }] = useMutation(UDPATE_PROFILE);
+  const [mutateFunction, { data, error }] = useMutation(UDPATE_PROFILE);
   const dispatch = useDispatch();
   const [photo, setPhoto] = useState();
   const [inputs, setInputs] = useState({
@@ -111,6 +113,7 @@ export default function UpdateProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = {};
 
     if (firstName) formData.firstName = firstName;
@@ -124,15 +127,20 @@ export default function UpdateProfile() {
       },
     });
   };
+  useEffect(() => {
+    if (error) setLoading(false);
+  }, [error]);
 
   useEffect(() => {
     if (data) {
+      setLoading(false);
       const action = {
         type: types.update,
         payload: data.updateProfile,
       };
       dispatch(action);
-      navigate('/profile');
+      setLoading(false);
+      navigate('/admin/profile');
     }
   }, [data, dispatch, navigate]);
 
@@ -140,14 +148,14 @@ export default function UpdateProfile() {
     <>
       <Announcement />
       <NavBar />
-      <UserProfile>
+      <AdminProfile>
         <BodyContainer>
           <TitleContainer>
             <ProfileTitleContainer>
               <ProfileIcon>
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
               </ProfileIcon>
-              <ProfileTitle>My Profile</ProfileTitle>
+              <ProfileTitle>Update Profile</ProfileTitle>
             </ProfileTitleContainer>
 
             <ImageProfile
@@ -157,7 +165,7 @@ export default function UpdateProfile() {
               }
             />
           </TitleContainer>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} style={{ opacity: loading ? '0.6' : '1' }}>
             <Row>
               <Form.Group as={Col} className="mb-3" controlId="formGridFirstName" sm={6}>
                 <Label>First Name</Label>
@@ -169,7 +177,18 @@ export default function UpdateProfile() {
                 <Form.Control name="lastName" onChange={handleInputChange} type="text" />
               </Form.Group>
             </Row>
-
+            <div
+              style={{
+                width: '100%',
+                textAlign: 'center',
+              }}>
+              <PropagateLoader
+                color="#1373e5"
+                loading={loading}
+                size={25}
+                style={{ marginTop: '6000px', marginLeft: '500px' }}
+              />
+            </div>
             <Row>
               <Form.Group as={Col} className="mb-3" controlId="formGridFirstCell" sm={6}>
                 <Label>Cell Phone</Label>
@@ -192,7 +211,8 @@ export default function UpdateProfile() {
             </div>
           </Form>
         </BodyContainer>
-      </UserProfile>
+      </AdminProfile>
+
       <Footer />
     </>
   );

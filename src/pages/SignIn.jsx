@@ -176,12 +176,6 @@ export default function SignIn() {
               <AccountOption>Sign Up</AccountOption>
             </Link>
           </AccountOptionContainer>
-          <AccountOptionContainer>
-            <div>You&apos;re a admin?</div>
-            <Link to="/admin/signin">
-              <AccountOption>Click Here</AccountOption>
-            </Link>
-          </AccountOptionContainer>
         </Form>
       </Wrapper>
     </Container>

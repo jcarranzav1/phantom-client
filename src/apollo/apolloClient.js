@@ -7,8 +7,9 @@ import { getSession } from '../session/session';
 const httpLink = createUploadLink({ uri: BASE_URL });
 const cache = new InMemoryCache();
 
-const authLink = setContext((_, { headers }) => {
+const AuthLink = setContext((_, { headers }) => {
   const token = getSession();
+
   return {
     headers: {
       ...headers,
@@ -18,7 +19,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: AuthLink.concat(httpLink),
   cache,
 });
 

@@ -34,7 +34,7 @@ const Wrapper = styled.div`
   background-color: rgb(255, 255, 255);
   color: rgb(43, 52, 69);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: rgb(3 0 71 / 9%) 0px 8px 45px;
+  box-shadow: rgba(3, 0, 71, 0.09) 0px 8px 45px;
   overflow: hidden;
   border-radius: 8px;
   width: 500px;

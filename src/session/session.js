@@ -11,3 +11,11 @@ export function getSession() {
 export function clearSession() {
   localStorage.removeItem(TOKEN_KEY);
 }
+
+export function getState() {
+  return JSON.parse(localStorage.getItem('state'));
+}
+
+export function setState(payload) {
+  localStorage.setItem('state', JSON.stringify(payload));
+}

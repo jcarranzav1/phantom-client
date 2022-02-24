@@ -40,8 +40,8 @@ export const PROFILE = gql`
 `;
 
 export const UDPATE_PROFILE = gql`
-  mutation UpdateProfile($updateProfileId: ID!, $input: UpdateAccountInput!) {
-    updateProfile(id: $updateProfileId, input: $input) {
+  mutation UpdateProfile($input: UpdateAccountInput!) {
+    updateProfile(input: $input) {
       firstName
       id
       cellphone

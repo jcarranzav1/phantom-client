@@ -1,12 +1,11 @@
 import { Global } from '@emotion/react';
 import { Route, Routes } from 'react-router-dom';
 import { PublicRoute } from './routes/PublicRoutes';
-import { PrivateRoute } from './routes/PrivateRoutes';
+import { UserPrivate } from './routes/UserPrivate';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SearchPage from './pages/SearchPage';
-import AdminRoutes from './Admin/AdminRoutes';
 import { GlobalStyles } from './style/globalStyle';
 import Categories from './pages/Categories';
 import Cart from './pages/Cart';
@@ -14,8 +13,8 @@ import Success from './pages/Success';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import UpdateProfile from './pages/UpdateProfile';
-import SignInAdmin from './Admin/pages/SignInAdmin';
 import { AdminPrivate } from './routes/AdminPrivate';
+import AdminRoutes from './routes/AdminRoutes';
 
 function App() {
   return (
@@ -48,29 +47,28 @@ function App() {
         <Route element={<Cart />} path="/shopcart" />
         <Route
           element={(
-            <PrivateRoute>
+            <UserPrivate>
               <Profile />
-            </PrivateRoute>
+            </UserPrivate>
           )}
           path="/profile"
         />
         <Route
           element={(
-            <PrivateRoute>
+            <UserPrivate>
               <UpdateProfile />
-            </PrivateRoute>
+            </UserPrivate>
           )}
           path="/updateProfile"
         />
         <Route
           element={(
-            <PrivateRoute>
+            <UserPrivate>
               <Success />
-            </PrivateRoute>
+            </UserPrivate>
           )}
           path="/success"
         />
-        <Route element={<SignInAdmin />} path="/admin/signin" />
         <Route
           element={(
             <AdminPrivate>

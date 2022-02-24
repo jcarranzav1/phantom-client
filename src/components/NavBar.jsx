@@ -13,7 +13,7 @@ import { maxWidth, minWidth } from '../style/responsive';
 import CartModal from './Modals/CartModal';
 import { useDispatch, useSelector } from '../store/authStore';
 import { types } from '../types/types';
-import { useCartActions, useCartSelector } from '../store/cart/cartStore';
+import { useCartSelector } from '../store/cart/cartStore';
 
 const Container = styled.div`
   width: 100%;
@@ -275,7 +275,6 @@ export const NavBar = () => {
   const dispatch = useDispatch();
 
   const cartArray = useCartSelector((state) => state.cartItems);
-  const { clearCart } = useCartActions();
 
   const handleFilterOpen = () => setFilterShow(true);
 
@@ -296,7 +295,6 @@ export const NavBar = () => {
     dispatch({ type: types.userSignout });
     await client.clearStore();
     client.cache.gc();
-    clearCart();
     navigate('/signin');
   };
   return (
@@ -365,7 +363,10 @@ export const NavBar = () => {
               id="basic-nav-dropdown"
               style={{ marginLeft: '25px' }}
               title={<PersonOutlineIcon />}>
-              <NavDropdown.Item as={Link} className="dropItem" to="/profile">
+              <NavDropdown.Item
+                as={Link}
+                className="dropItem"
+                to={userData.isAdmin ? `/admin/dashboard` : '/profile'}>
                 Profile
               </NavDropdown.Item>
               <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>

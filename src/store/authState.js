@@ -1,6 +1,5 @@
 export const blankState = {
   user: null,
-  admin: null,
   cart: {},
 };
 

@@ -3,12 +3,12 @@ import styled from '@emotion/styled';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import Announcement from '../components/Announcement';
-import Footer from '../components/Footer';
-import { NavBar } from '../components/NavBar';
-import { Button } from '../style/buttons';
-import { PROFILE } from '../apollo/user.querys';
-import UserProfile from '../components/Profile/UserProfile';
+import Announcement from '../../components/Announcement';
+import Footer from '../../components/Footer';
+import { NavBar } from '../../components/NavBar';
+import { Button } from '../../style/buttons';
+import { PROFILE } from '../../apollo/user.querys';
+import AdminProfile from '../../components/Profile/AdminProfile';
 
 const BodyContainer = styled.div`
   background-color: #fff;
@@ -89,7 +89,7 @@ export default function Profile() {
     <>
       <Announcement />
       <NavBar />
-      <UserProfile>
+      <AdminProfile>
         <BodyContainer>
           <TitleContainer>
             <ProfileTitleContainer>
@@ -129,10 +129,10 @@ export default function Profile() {
           </Row>
 
           <div style={{ width: '100%', textAlign: 'center', marginTop: '50px' }}>
-            <Button onClick={() => navigate('./updateProfile')}>Edit Profile</Button>
+            <Button onClick={() => navigate('/admin/updateProfile')}>Edit Profile</Button>
           </div>
         </BodyContainer>
-      </UserProfile>
+      </AdminProfile>
 
       <Footer />
     </>

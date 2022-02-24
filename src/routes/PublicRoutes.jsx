@@ -4,5 +4,5 @@ import { useSelector } from '../store/authStore';
 export const PublicRoute = ({ children }) => {
   const client = useSelector((state) => state.user);
 
-  return client ? <Navigate to="/home" /> : children;
+  return client ? <Navigate to="/" /> : children;
 };

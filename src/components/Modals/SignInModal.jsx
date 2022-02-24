@@ -90,6 +90,7 @@ const SignInModal = ({ show, setShow }) => {
             <InputWrapper className={`${border2} pe-3`}>
               <InputForm
                 {...register('password')}
+                autocomplete="off"
                 name="password"
                 onBlur={() => setBorder({ ...border, border2: '' })}
                 onFocus={() => setBorder({ ...border, border2: 'focusBorder' })}
@@ -135,12 +136,6 @@ const SignInModal = ({ show, setShow }) => {
           <div>Don&apos;t have account?</div>
           <Link to="/signup">
             <AccountOption>Sign Up</AccountOption>
-          </Link>
-        </AccountOptionContainer>
-        <AccountOptionContainer>
-          <div>You&apos;re a admin?</div>
-          <Link to="/admin/signin">
-            <AccountOption>Click Here</AccountOption>
           </Link>
         </AccountOptionContainer>
       </Form>

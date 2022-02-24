@@ -50,7 +50,7 @@ const FilterContainer = styled.div`
   color: #2b3445;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
-  box-shadow: 0px 1px 3px rgb(3 0 71 / 9%);
+  box-shadow: 0px 1px 3px rgba(3, 0, 71, 0.09);
   border-radius: 8px;
   display: flex;
   flex-wrap: wrap;

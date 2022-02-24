@@ -13,6 +13,7 @@ const Container = styled.div`
   background-color: #fff;
   margin-bottom: 1.5rem;
   box-shadow: 0px 4px 16px rgba(43, 52, 69, 0.1);
+  padding: 20px;
 `;
 
 const Body = styled.div`
@@ -21,7 +22,7 @@ const Body = styled.div`
   justify-content: space-between;
   min-width: 0px;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
 
 const Model = styled.span`
@@ -208,7 +209,7 @@ export default function ShopCartCard({ id, photo, model, price, quantity }) {
   const { increase, decrease, removeProduct } = useCartActions();
   return (
     <Container>
-      <img alt="products" height="140px" src={photo} width="140px" />
+      <img alt="products" height="100px" src={photo} width="100px" />
       <Body>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Link to={`/products/${id}`}>

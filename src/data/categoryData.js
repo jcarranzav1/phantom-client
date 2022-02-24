@@ -1,5 +1,4 @@
 export const categories = [
-  { value: '', label: 'None' },
   { value: 'pc_case', label: 'PC Case' },
   { value: 'monitor', label: 'Monitor' },
   { value: 'laptop', label: 'Laptop' },

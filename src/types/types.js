@@ -1,8 +1,6 @@
 export const types = {
   userSignin: '[user] signin',
   userSignout: '[user] signout',
-  adminSignin: '[admin] signin',
-  adminSignout: '[admin] signout',
   update: '[user] update',
 };
 
