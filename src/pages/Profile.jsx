@@ -129,7 +129,7 @@ export default function Profile() {
           </Row>
 
           <div style={{ width: '100%', textAlign: 'center', marginTop: '50px' }}>
-            <Button onClick={() => navigate('./updateProfile')}>Edit Profile</Button>
+            <Button onClick={() => navigate('/updateProfile')}>Edit Profile</Button>
           </div>
         </BodyContainer>
       </UserProfile>

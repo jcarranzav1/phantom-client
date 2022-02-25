@@ -235,10 +235,10 @@ export default function Register() {
             </FormControl>
           </div>
           <ButtonsContainer>
-            <Button type="submit" large>
+            <Button id="createAccount" type="submit" large>
               Create Account
             </Button>
-            <Button onClick={() => navigate('/')} type="button" large>
+            <Button id="returnHome" onClick={() => navigate('/')} type="button" large>
               Return Home
             </Button>
           </ButtonsContainer>
