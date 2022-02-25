@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { useMutation } from '@apollo/client';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
@@ -11,7 +10,6 @@ import { minWidth } from '../style/responsive';
 import CartIndex from '../components/Products/CartIndex';
 import { STRIPE_KEY } from '../session/consts';
 import PaymentForm from '../components/PaymentForm';
-import { PAYMENT } from '../apollo/payment.querys';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -125,28 +123,7 @@ const BreakLine = styled.hr`
 const stripePromise = loadStripe(STRIPE_KEY);
 
 export default function Payment() {
-  const [paymentMutation, { data }] = useMutation(PAYMENT);
-  const [clientSecret, setClientSecret] = useState('');
-
   const total = useCartSelector((state) => state.total);
-
-  useEffect(() => {
-    const paymentCall = async () => {
-      try {
-        await paymentMutation({ variables: { input: { amount: parseFloat(total) } } });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    paymentCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      setClientSecret(data.payment.clientSecret);
-    }
-  }, [data]);
 
   const appearance = {
     theme: 'stripe',
@@ -155,10 +132,8 @@ export default function Payment() {
     },
   };
   const options = {
-    clientSecret,
     appearance,
   };
-  console.log(clientSecret);
   return (
     <>
       <Announcement />
@@ -168,11 +143,9 @@ export default function Payment() {
         <CartIndex state={3} />
         <Wrapper>
           <Left>
-            {clientSecret && (
-              <Elements options={options} stripe={stripePromise}>
-                <PaymentForm />
-              </Elements>
-            )}
+            <Elements options={options} stripe={stripePromise}>
+              <PaymentForm />
+            </Elements>
           </Left>
           <Right>
             <RightWrapper>

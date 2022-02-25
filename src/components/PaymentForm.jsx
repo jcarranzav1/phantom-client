@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { PropagateLoader } from 'react-spinners';
-import queryString from 'query-string';
+import { useMutation } from '@apollo/client';
 import { Button } from '../style/buttons';
-import { CLIENT_URL } from '../session/consts';
+import { PAYMENT } from '../apollo/payment.querys';
+import { useCartActions, useCartSelector } from '../store/cart/cartStore';
+import { createOrder } from '../apollo/order.query';
 
 const BillingContainer = styled.div`
   background-color: rgb(255, 255, 255);
@@ -47,63 +49,72 @@ export default function PaymentForm() {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
+  const [paymentMutation, { data }] = useMutation(PAYMENT);
+  const [orderMutation] = useMutation(createOrder);
   const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-  const query = queryString.parse(location.search);
-  const { payment_intent_client_secret: clientSecret } = query;
-
-  useEffect(() => {
-    if (!stripe) {
-      return;
-    }
-    if (!clientSecret) {
-      return;
-    }
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent.status) {
-      case 'succeeded':
-        navigate('/success');
-        break;
-      case 'requires_payment_method':
-        navigate('/error');
-        break;
-      default:
-        navigate('/error');
-        break;
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stripe]);
+  const { clearCart } = useCartActions();
+  const cartState = useCartSelector((state) => state);
+  const billingAddress = JSON.parse(localStorage.getItem('billingAddress'));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) {
-      return;
-    }
-
     setIsLoading(true);
-
-    const data = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // eslint-disable-next-line camelcase
-        return_url: `${CLIENT_URL}/payment`,
-      },
-    });
-    console.log(data);
-    if (data.error.type === 'card_error' || data.error.type === 'validation_error') {
-      console.log(data.error.message);
-    } else {
-      console.log('An unexpected error occured.');
+    try {
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardElement),
+      });
+      if (!error) {
+        const { id } = paymentMethod;
+        await paymentMutation({
+          variables: { input: { id, amount: parseFloat(cartState.total) } },
+        });
+      }
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
     }
-
-    setIsLoading(false);
   };
+
+  useEffect(() => {
+    const orderCall = async () => {
+      try {
+        await orderMutation({
+          variables: {
+            input: {
+              amount: parseFloat(cartState.total),
+              products: cartState.cartItems.map((item) => ({
+                product: item.id,
+                quantity: item.quantity,
+              })),
+              billingAddress,
+            },
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    orderCall();
+    if (data) {
+      orderCall();
+      localStorage.removeItem('billingAddress');
+      clearCart();
+      navigate('/success');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
   return (
     <Form onSubmit={handleSubmit} style={{ opacity: isLoading ? '0.4' : '1' }}>
       <BillingContainer>
         <BillingTitle>Credit Card</BillingTitle>
-        <Form.Group controlId="formGridModel" style={{ padding: 0 }}>
+        <Form.Group
+          controlId="formGridModel"
+          style={{
+            border: '1px solid #c4c4c4',
+            padding: '10px',
+            borderRadius: '8px',
+          }}>
           <div
             style={{
               width: '100%',
@@ -116,7 +127,7 @@ export default function PaymentForm() {
               style={{ marginTop: '6000px', marginLeft: '500px' }}
             />
           </div>
-          <PaymentElement />
+          <CardElement />
         </Form.Group>
       </BillingContainer>
       <ButtonContainer>
