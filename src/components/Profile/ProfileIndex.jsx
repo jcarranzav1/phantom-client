@@ -94,6 +94,7 @@ export default function ProfileIndex({ settingArray }) {
         {settingArray.map((element) => (
           <Link
             key={uuidv4()}
+            id={element.id}
             style={{ color: 'inherit', textDecoration: 'none' }}
             to={element.url}>
             <ItemContainer>
