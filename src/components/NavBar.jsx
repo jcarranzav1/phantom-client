@@ -353,26 +353,29 @@ export const NavBar = () => {
           </form>
         </Center>
         <Right>
-          <MenuItem onClick={handleShopCartOpen} type="button">
+          <MenuItem id="shopCartButton" onClick={handleShopCartOpen} type="button">
             <Badge badgeContent={cartArray.length} color="primary">
               <ShoppingCartOutlined />
             </Badge>
           </MenuItem>
           {userData ? (
             <NavDropdown
-              id="basic-nav-dropdown"
+              id="userDropdown"
               style={{ marginLeft: '25px' }}
               title={<PersonOutlineIcon />}>
               <NavDropdown.Item
                 as={Link}
                 className="dropItem"
+                id="userProfile"
                 to={userData.isAdmin ? `/admin/profile` : '/profile'}>
                 Profile
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
+              <NavDropdown.Item id="signOut" onClick={onSignOut}>
+                Sign Out
+              </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            <MenuItem onClick={handleFilterOpen} type="button">
+            <MenuItem id="userModal" onClick={handleFilterOpen} type="button">
               <PersonOutlineIcon />
             </MenuItem>
           )}
