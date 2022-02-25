@@ -66,6 +66,7 @@ function cartReducer(state = {}, action) {
       cartItems: [],
       ...sumItems([]),
     };
+
   default:
     return state;
   }

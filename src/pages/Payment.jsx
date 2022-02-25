@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
-import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { useMutation } from '@apollo/client';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
-import ShopCartCard from '../components/Products/ShopCartCard';
 import { useCartSelector } from '../store/cart/cartStore';
-import { Button } from '../style/buttons';
 import { minWidth } from '../style/responsive';
-
 import CartIndex from '../components/Products/CartIndex';
+import { STRIPE_KEY } from '../session/consts';
+import PaymentForm from '../components/PaymentForm';
+import { PAYMENT } from '../apollo/payment.querys';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -121,21 +121,58 @@ const BreakLine = styled.hr`
   border-bottom-width: thin;
   margin-bottom: 1rem;
 `;
-export default function Cart() {
-  const cartArray = useCartSelector((state) => state.cartItems);
+
+const stripePromise = loadStripe(STRIPE_KEY);
+
+export default function Payment() {
+  const [paymentMutation, { data }] = useMutation(PAYMENT);
+  const [clientSecret, setClientSecret] = useState('');
+
   const total = useCartSelector((state) => state.total);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const paymentCall = async () => {
+      try {
+        await paymentMutation({ variables: { input: { amount: parseFloat(total) } } });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    paymentCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setClientSecret(data.payment.clientSecret);
+    }
+  }, [data]);
+
+  const appearance = {
+    theme: 'stripe',
+    variables: {
+      colorPrimary: '#2c6eaf',
+    },
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+  console.log(clientSecret);
   return (
     <>
       <Announcement />
       <NavBar />
+
       <Container>
-        <CartIndex state={1} />
+        <CartIndex state={3} />
         <Wrapper>
           <Left>
-            {cartArray.map((products) => (
-              <ShopCartCard key={uuidv4()} {...products} />
-            ))}
+            {clientSecret && (
+              <Elements options={options} stripe={stripePromise}>
+                <PaymentForm />
+              </Elements>
+            )}
           </Left>
           <Right>
             <RightWrapper>
@@ -146,18 +183,6 @@ export default function Cart() {
                 </div>
               </PriceContainer>
               <BreakLine />
-              {/*  <StripeCheckout
-                amount={parseFloat(total)}
-                description={`Your total is $${total}`}
-                image="https://i.pinimg.com/originals/cd/2d/69/cd2d69fb186590d7a684f805dc64a3c1.jpg"
-                name="Phantom"
-                stripeKey={STRIPE_KEY}
-                token={onToken}
-                billingAddress> */}
-              <Button className="mt-2" onClick={() => navigate('/billing')} large outline>
-                Checkout Now
-              </Button>
-              {/* </StripeCheckout> */}
             </RightWrapper>
           </Right>
         </Wrapper>

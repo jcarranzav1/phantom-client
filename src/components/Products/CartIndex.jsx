@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { minWidth } from '../../style/responsive';
 
 const Container = styled.div`
@@ -88,20 +87,19 @@ const LineIndex = styled.div`
 `;
 
 export default function CartIndex({ state }) {
-  const navigate = useNavigate();
   return (
     <div className="mb-4">
       <Container>
         <Wrapper>
           <Index>
-            <IndexButton onClick={() => navigate('/shopcart')} active>
+            <IndexButton active>
               <IndexText>1. Cart</IndexText>
             </IndexButton>
-            <LineIndex active={state >= 2} onClick={() => navigate('/billing')} />
+            <LineIndex active={state >= 2} />
             <IndexButton active={state >= 2}>
               <IndexText>2. Details</IndexText>
             </IndexButton>
-            <LineIndex active={state >= 3} onClick={() => navigate('/payment')} />
+            <LineIndex active={state >= 3} />
             <IndexButton active={state >= 3}>
               <IndexText>3. Payment</IndexText>
             </IndexButton>

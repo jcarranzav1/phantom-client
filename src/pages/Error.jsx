@@ -1,11 +1,8 @@
-import { useMutation } from '@apollo/client';
 import styled from '@emotion/styled';
-import React, { useEffect } from 'react';
-import { createOrder } from '../apollo/order.query';
+import React from 'react';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
-import { useCartActions, useCartSelector } from '../store/cart/cartStore';
 import { Button } from '../style/buttons';
 import { minWidth } from '../style/responsive';
 
@@ -69,8 +66,8 @@ const ImageContainer = styled.span`
 `;
 
 const Image = styled.img`
-  max-width: 116px;
-  max-height: 116px;
+  max-width: 300px;
+  max-height: 300;
 `;
 const Title = styled.h1`
   margin-bottom: 0px;
@@ -81,38 +78,7 @@ const Title = styled.h1`
   text-transform: none;
   white-space: normal;
 `;
-export default function Success() {
-  const [orderMutation] = useMutation(createOrder);
-  const cartState = useCartSelector((state) => state);
-  const { clearCart } = useCartActions();
-  const billingAddress = JSON.parse(localStorage.getItem('billingAddress'));
-  console.log(cartState.cartItems);
-  useEffect(() => {
-    const orderCall = async () => {
-      try {
-        await orderMutation({
-          variables: {
-            input: {
-              amount: parseFloat(cartState.total),
-              products: cartState.cartItems.map((item) => ({
-                product: item.id,
-                quantity: item.quantity,
-              })),
-              billingAddress,
-            },
-          },
-        });
-        localStorage.removeItem('billingAddress');
-        clearCart();
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    orderCall();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+export default function Error() {
   return (
     <>
       <Announcement />
@@ -121,10 +87,10 @@ export default function Success() {
         <Wrapper>
           <Body>
             <ImageContainer>
-              <Image src="https://bazar-react.vercel.app/_next/image?url=%2Fassets%2Fimages%2Fillustrations%2Fparty-popper.svg&w=128&q=75" />
+              <Image src="	https://bazar-react.vercel.app/assets/images/illustrations/404.svg" />
             </ImageContainer>
-            <Title>Your order is completed!</Title>
-            <Button className="mt-4">See the Order</Button>
+            <Title>We were unable to process your purchase</Title>
+            <Button className="mt-5">Browse Products</Button>
           </Body>
         </Wrapper>
       </Container>

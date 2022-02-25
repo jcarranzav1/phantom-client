@@ -15,6 +15,9 @@ import NotFound from './pages/NotFound';
 import UpdateProfile from './pages/UpdateProfile';
 import { AdminPrivate } from './routes/AdminPrivate';
 import AdminRoutes from './routes/AdminRoutes';
+import Billing from './pages/Billing';
+import Payment from './pages/Payment';
+import Error from './pages/Error';
 
 function App() {
   return (
@@ -28,6 +31,24 @@ function App() {
           <Route element={<Categories />} path=":category" />
           <Route element={<Home />} path=":id" />
         </Route>
+        <Route element={<Cart />} path="/shopcart" />
+        <Route
+          element={(
+            <UserPrivate>
+              <Billing />
+            </UserPrivate>
+          )}
+          path="/billing"
+        />
+        <Route
+          element={(
+            <UserPrivate>
+              <Payment />
+            </UserPrivate>
+          )}
+          path="/payment"
+        />
+
         <Route
           element={(
             <PublicRoute>
@@ -44,7 +65,7 @@ function App() {
           )}
           path="/signup"
         />
-        <Route element={<Cart />} path="/shopcart" />
+
         <Route
           element={(
             <UserPrivate>
@@ -68,6 +89,14 @@ function App() {
             </UserPrivate>
           )}
           path="/success"
+        />
+        <Route
+          element={(
+            <UserPrivate>
+              <Error />
+            </UserPrivate>
+          )}
+          path="/error"
         />
         <Route
           element={(
