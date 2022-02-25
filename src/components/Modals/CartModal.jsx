@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { CartCard } from '../Products/CartCard';
 import { Button } from '../../style/buttons';
-import { useCartSelector } from '../../store/cart/cartStore';
+import { useCartActions, useCartSelector } from '../../store/cart/cartStore';
 import { useSelector } from '../../store/authStore';
 
 const Top = styled.div`
@@ -55,7 +55,7 @@ const CartModal = ({ show, setShow }) => {
   const cartArray = useCartSelector((state) => state.cartItems);
   const total = useCartSelector((state) => state.total);
   const user = useSelector((state) => state.user);
-
+  const { clearCart } = useCartActions();
   const handleClick = () => {
     if (user.isAdmin) {
       navigate('/');
@@ -66,12 +66,18 @@ const CartModal = ({ show, setShow }) => {
   return (
     <Modal className="p-0 modalRight" onHide={handleClose} show={show}>
       <Top>
-        <Header>
-          <HeaderIcon>
-            <path d="M18,6h-2c0-2.21-1.79-4-4-4S8,3.79,8,6H6C4.9,6,4,6.9,4,8v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8C20,6.9,19.1,6,18,6z M12,4c1.1,0,2,0.9,2,2h-4C10,4.9,10.9,4,12,4z M18,20H6V8h2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V8h4v2c0,0.55,0.45,1,1,1s1-0.45,1-1V8 h2V20z" />
-          </HeaderIcon>
-          <HeaderText>{cartArray.length} item</HeaderText>
-        </Header>
+        <div className="d-flex justify-content-between align-items-center">
+          <Header>
+            <HeaderIcon>
+              <path d="M18,6h-2c0-2.21-1.79-4-4-4S8,3.79,8,6H6C4.9,6,4,6.9,4,8v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8C20,6.9,19.1,6,18,6z M12,4c1.1,0,2,0.9,2,2h-4C10,4.9,10.9,4,12,4z M18,20H6V8h2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V8h4v2c0,0.55,0.45,1,1,1s1-0.45,1-1V8 h2V20z" />
+            </HeaderIcon>
+            <HeaderText>{cartArray.length} item</HeaderText>
+          </Header>
+          <Button onClick={() => clearCart()} style={{ margin: 0, marginRight: '20px' }} outline>
+            Clear Cart
+          </Button>
+        </div>
+
         <BreakLine />
         {cartArray.map((products) => (
           <CartCard key={uuidv4()} {...products} />
