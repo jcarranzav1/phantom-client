@@ -4,6 +4,7 @@ import NewAdmin from '../pages/admin/NewAdmin';
 import NewProduct from '../pages/admin/NewProduct';
 import Products from '../pages/admin/Products';
 import Profile from '../pages/admin/Profile';
+import UpdateProduct from '../pages/admin/UpdateProduct';
 import UpdateProfile from '../pages/admin/UpdateProfile';
 import NotFound from '../pages/NotFound';
 
@@ -15,6 +16,10 @@ export default function AdminRoutes() {
       <Route element={<UpdateProfile />} path="/updateProfile" />
       <Route element={<NewProduct />} path="/newProduct" />
       <Route element={<Products />} path="/products" />
+      <Route path="/product">
+        <Route element={<UpdateProduct />} path=":id" />
+      </Route>
+
       <Route element={<NewAdmin />} path="/newAdmin" />
       <Route element={<NotFound />} path="*" />
     </Routes>

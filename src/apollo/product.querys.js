@@ -14,6 +14,21 @@ export const getAllProducts = gql`
   }
 `;
 
+export const getProductsByPage = gql`
+  query ProductByPage($page: Int!, $limit: Int! = 5) {
+    productByPage(page: $page, limit: $limit) {
+      id
+      model
+      price
+      category
+      description
+      photo
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const createProduct = gql`
   mutation ($input: ProductInput!) {
     addProduct(input: $input) {
@@ -21,6 +36,19 @@ export const createProduct = gql`
       model
       price
       category
+    }
+  }
+`;
+
+export const updateProduct = gql`
+  mutation UpdateProduct($updateProductId: ID!, $input: ProductInput!) {
+    updateProduct(id: $updateProductId, input: $input) {
+      id
+      model
+      price
+      category
+      createdAt
+      description
     }
   }
 `;
