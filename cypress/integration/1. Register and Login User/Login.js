@@ -11,7 +11,13 @@ describe('Sign Up', () => {
       cy.get('input[name="email"]').type('jcarranzav1@upao.edu.pe');
       cy.get('input[name="password"]').type('Juandiego#02');
       cy.get('input[name="confirmPassword"]').type('Juandiego#02');
-      cy.get('form').submit();
+      cy.get('#createAccount').click();
+    });
+
+    cy.get('form').within(() => {
+      cy.get('input[name="email"]').type('jcarranzav1@upao.edu.pe');
+      cy.get('input[name="password"]').type('Juandiego#02');
+      cy.get('#createAccount').click();
     });
   });
 });

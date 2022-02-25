@@ -162,10 +162,10 @@ export default function SignIn() {
             </FormControl>
           </div>
           <ButtonsContainer>
-            <Button type="submit" large>
+            <Button id="loginUser" type="submit" large>
               Login
             </Button>
-            <Button onClick={() => navigate('/')} type="button" large>
+            <Button id="returnHome" onClick={() => navigate('/')} type="button" large>
               Return Home
             </Button>
           </ButtonsContainer>

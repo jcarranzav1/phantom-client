@@ -129,7 +129,7 @@ const SignInModal = ({ show, setShow }) => {
             )}
           </FormControl>
         </div>
-        <Button type="submit" large>
+        <Button id="loginUser" type="submit" large>
           Login
         </Button>
         <AccountOptionContainer>
