@@ -187,6 +187,7 @@ export default function UpdateProduct() {
                     <Form.Group as={Col} controlId="formGridCategory" lg={6} md={12}>
                       <Select
                         defaultValue=""
+                        name="category"
                         onChange={(options) => setCategory(options.value)}
                         options={categories}
                         placeholder="Select Category"

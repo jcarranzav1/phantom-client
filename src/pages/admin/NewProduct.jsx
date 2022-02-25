@@ -208,7 +208,9 @@ export default function NewProduct() {
                     </Form.Group>
                   </Row>
                   <div style={{ width: '100%', textAlign: 'center', marginTop: '50px' }}>
-                    <Button type="submit">Create Product</Button>
+                    <Button id="createProduct" type="submit">
+                      Create Product
+                    </Button>
                   </div>
                 </Form>
               </BodyContainer>
