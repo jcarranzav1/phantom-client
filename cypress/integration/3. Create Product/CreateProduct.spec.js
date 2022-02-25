@@ -1,8 +1,8 @@
 import '../../support/commands';
 
-describe('Sign Up', () => {
+describe('Create New Product', () => {
   // eslint-disable-next-line jest/expect-expect
-  it('sign-up as user', () => {
+  it('create product', () => {
     cy.visit('https://pc-phantom.netlify.app/');
     cy.get('#userModal').click();
     cy.get('form').within(() => {
@@ -66,7 +66,7 @@ Empaquetado
     Manual de usuario: Si
     Tipo de embalaje: Caja`);
 
-      // cy.get('#loginUser').click();
+      cy.get('#createProduct').click();
     });
   });
 });

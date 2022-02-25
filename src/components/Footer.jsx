@@ -163,8 +163,8 @@ export default function Footer() {
                   <Logo>Phantom</Logo>
                 </Link>
                 <Text>
-                  Le informaremos cuando tengamos novedades, eventos y promociones. No se preocupe,
-                  los enviamos con poca frecuencia, ¡solo un saludo amistoso de vez en cuando!
+                  We will inform you when we have news, events and promotions. Don&apos;t worry, we
+                  send them infrequently, just a friendly greeting from time to time!
                 </Text>
               </Items1>
               <Items3>

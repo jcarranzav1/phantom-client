@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 export default function ProductList({ productArray }) {
   return (
     <Container>
-      <Wrapper>
+      <Wrapper id="productData">
         {productArray.map((product) => (
           <ProductCard key={uuidv4()} {...product} />
         ))}
