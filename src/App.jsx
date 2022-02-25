@@ -18,6 +18,7 @@ import AdminRoutes from './routes/AdminRoutes';
 import Billing from './pages/Billing';
 import Payment from './pages/Payment';
 import Error from './pages/Error';
+import Order from './pages/Order';
 
 function App() {
   return (
@@ -81,6 +82,14 @@ function App() {
             </UserPrivate>
           )}
           path="/updateProfile"
+        />
+        <Route
+          element={(
+            <UserPrivate>
+              <Order />
+            </UserPrivate>
+          )}
+          path="/order"
         />
         <Route
           element={(

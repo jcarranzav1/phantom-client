@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import { NavBar } from '../components/NavBar';
@@ -79,6 +80,7 @@ const Title = styled.h1`
   white-space: normal;
 `;
 export default function Success() {
+  const navigate = useNavigate();
   return (
     <>
       <Announcement />
@@ -90,7 +92,9 @@ export default function Success() {
               <Image src="https://bazar-react.vercel.app/_next/image?url=%2Fassets%2Fimages%2Fillustrations%2Fparty-popper.svg&w=128&q=75" />
             </ImageContainer>
             <Title>Your order is completed!</Title>
-            <Button className="mt-4">See the Order</Button>
+            <Button className="mt-4" onClick={() => navigate('/order')}>
+              See the Order
+            </Button>
           </Body>
         </Wrapper>
       </Container>

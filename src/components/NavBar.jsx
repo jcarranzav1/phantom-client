@@ -366,7 +366,7 @@ export const NavBar = () => {
               <NavDropdown.Item
                 as={Link}
                 className="dropItem"
-                to={userData.isAdmin ? `/admin/dashboard` : '/profile'}>
+                to={userData.isAdmin ? `/admin/profile` : '/profile'}>
                 Profile
               </NavDropdown.Item>
               <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { CartCard } from '../Products/CartCard';
 import { Button } from '../../style/buttons';
 import { useCartSelector } from '../../store/cart/cartStore';
+import { useSelector } from '../../store/authStore';
 
 const Top = styled.div`
   overflow: auto;
@@ -53,7 +54,15 @@ const CartModal = ({ show, setShow }) => {
   const navigate = useNavigate();
   const cartArray = useCartSelector((state) => state.cartItems);
   const total = useCartSelector((state) => state.total);
+  const user = useSelector((state) => state.user);
 
+  const handleClick = () => {
+    if (user.isAdmin) {
+      navigate('/');
+    } else {
+      navigate('/billing');
+    }
+  };
   return (
     <Modal className="p-0 modalRight" onHide={handleClose} show={show}>
       <Top>
@@ -69,7 +78,7 @@ const CartModal = ({ show, setShow }) => {
         ))}
       </Top>
       <Bottom>
-        <Button className="mb-3" onClick={() => navigate('/billing')} large>
+        <Button className="mb-3" onClick={handleClick} large>
           Checkout Now (${total})
         </Button>
         <Button onClick={() => navigate('/shopcart')} large outline>

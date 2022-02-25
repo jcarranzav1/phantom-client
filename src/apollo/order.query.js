@@ -11,3 +11,13 @@ export const createOrder = gql`
     }
   }
 `;
+
+export const myOrders = gql`
+  query MyOrders($page: Int!, $limit: Int! = 5) {
+    myOrders(page: $page, limit: $limit) {
+      id
+      amount
+      createdAt
+    }
+  }
+`;

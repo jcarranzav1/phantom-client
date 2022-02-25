@@ -95,7 +95,6 @@ export default function PaymentForm() {
         console.log(err);
       }
     };
-    orderCall();
     if (data) {
       orderCall();
       localStorage.removeItem('billingAddress');

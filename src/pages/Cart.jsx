@@ -12,6 +12,7 @@ import { Button } from '../style/buttons';
 import { minWidth } from '../style/responsive';
 
 import CartIndex from '../components/Products/CartIndex';
+import { useSelector } from '../store/authStore';
 
 const Container = styled.div`
   ${minWidth(1280, {
@@ -124,7 +125,17 @@ const BreakLine = styled.hr`
 export default function Cart() {
   const cartArray = useCartSelector((state) => state.cartItems);
   const total = useCartSelector((state) => state.total);
+  const user = useSelector((state) => state.user);
+
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (user.isAdmin) {
+      navigate('/');
+    } else {
+      navigate('/billing');
+    }
+  };
   return (
     <>
       <Announcement />
@@ -154,7 +165,7 @@ export default function Cart() {
                 stripeKey={STRIPE_KEY}
                 token={onToken}
                 billingAddress> */}
-              <Button className="mt-2" onClick={() => navigate('/billing')} large outline>
+              <Button className="mt-2" onClick={handleClick} large outline>
                 Checkout Now
               </Button>
               {/* </StripeCheckout> */}
