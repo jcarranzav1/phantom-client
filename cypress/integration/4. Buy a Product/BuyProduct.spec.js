@@ -8,7 +8,14 @@ describe('Create New Product', () => {
       cy.get('input[name="password"]').type('Juandiego#02');
       cy.get('#loginUser').click();
     });
-    cy.wait(3000);
+    cy.wait(2000);
     cy.get('input[name="search"]').type('asus').type('{enter}');
+    cy.wait(1000);
+    cy.get('#productData')
+      .children()
+      .within(() => {
+        cy.get('button').click({ multiple: true });
+      });
+    cy.get('#shopCartButton').click();
   });
 });

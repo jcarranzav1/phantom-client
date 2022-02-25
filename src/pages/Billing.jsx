@@ -227,7 +227,9 @@ export default function Billing() {
                 <Button onClick={() => navigate('/shopcart')} type="button" outline>
                   Back to Cart
                 </Button>
-                <Button type="submit">Proceed to Payment</Button>
+                <Button id="billingPayment" type="submit">
+                  Proceed to Payment
+                </Button>
               </ButtonContainer>
             </Form>
           </Left>
