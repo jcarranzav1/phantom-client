@@ -257,6 +257,7 @@ export default function Products() {
               <li>
                 <Arrows
                   disabled={number === 1}
+                  id="previousArrow"
                   onClick={() => handleNumber(number - 1)}
                   style={{ opacity: number === 1 ? '0.4' : '1' }}>
                   <ArrowIcon>
@@ -292,6 +293,7 @@ export default function Products() {
               <li>
                 <Arrows
                   disabled={number === 5}
+                  id="nextArrow"
                   onClick={() => handleNumber(number + 1)}
                   style={{ opacity: number === 5 ? '0.4' : '1' }}>
                   <ArrowIcon>

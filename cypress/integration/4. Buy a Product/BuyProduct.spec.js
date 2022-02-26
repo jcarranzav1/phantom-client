@@ -16,7 +16,9 @@ describe('Create New Product', () => {
       .within(() => {
         cy.get('button').click({ multiple: true });
       });
+
     cy.get('#shopCartButton').click();
+    cy.wait(2000);
     cy.get('#cartCheckout').click();
     cy.get('form').within(() => {
       cy.get('input[name="country"]').type('Perú', { force: true });
@@ -39,7 +41,7 @@ describe('Create New Product', () => {
       .should('not.be.empty')
       .then(cy.wrap)
       .find('input[data-elements-stable-field-name="cardExpiry"]')
-      .type('0408');
+      .type('0824');
 
     cy.get('iframe')
       .its('0.contentDocument.body')
@@ -55,8 +57,8 @@ describe('Create New Product', () => {
       .find('input[data-elements-stable-field-name="postalCode"]')
       .type('12345');
 
-    cy.get('#payNow').click();
-    cy.wait(2000);
-    cy.get('#successOrder').click();
+    cy.get('#payNow').click({ force: true });
+    cy.wait(4000);
+    cy.get('#successOrder').click({ force: true });
   });
 });
