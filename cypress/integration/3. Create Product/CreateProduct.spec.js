@@ -67,10 +67,10 @@ Empaquetado
     Tipo de embalaje: Caja`);
 
       cy.get('#createProduct').click();
-      cy.get('#nextArrow').click();
-      cy.get('#nextArrow').click();
-      cy.get('#nextArrow').click();
-      cy.get('#nextArrow').click();
     });
+    cy.get('#nextArrow').click({ force: true });
+    cy.get('#nextArrow').click({ force: true });
+    cy.get('#nextArrow').click({ force: true });
+    cy.get('#nextArrow').click({ force: true });
   });
 });
