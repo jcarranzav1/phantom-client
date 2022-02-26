@@ -17,7 +17,7 @@ describe('Create New Product', () => {
     cy.get('form').within(() => {
       cy.get('input[name="model"]').type('Asus TUF Gaming GeForce RTX 3070 Ti');
       cy.get('input[name="price"]').type('979');
-      cy.get('#react-select-2-input').type('Graphics Card').type('{enter}');
+      cy.get('#react-select-2-input').type('Graphics Card', { force: true }).type('{enter}');
       cy.get('#photo').attachFile('AsusGeForceRTX3070Ti.jpg', { subjectType: 'input' });
       cy.get('textarea[name="description"]').type(`
 Procesador
