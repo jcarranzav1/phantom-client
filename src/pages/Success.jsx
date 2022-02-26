@@ -92,7 +92,7 @@ export default function Success() {
               <Image src="https://bazar-react.vercel.app/_next/image?url=%2Fassets%2Fimages%2Fillustrations%2Fparty-popper.svg&w=128&q=75" />
             </ImageContainer>
             <Title>Your order is completed!</Title>
-            <Button className="mt-4" onClick={() => navigate('/order')}>
+            <Button className="mt-4" id="successOrder" onClick={() => navigate('/order')}>
               See the Order
             </Button>
           </Body>

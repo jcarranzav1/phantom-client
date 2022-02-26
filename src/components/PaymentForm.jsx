@@ -126,14 +126,16 @@ export default function PaymentForm() {
               style={{ marginTop: '6000px', marginLeft: '500px' }}
             />
           </div>
-          <CardElement />
+          <CardElement id="paymentInput" />
         </Form.Group>
       </BillingContainer>
       <ButtonContainer>
         <Button onClick={() => navigate('/billing')} type="button" outline>
           Back to Checkout Details
         </Button>
-        <Button type="submit">Pay now</Button>
+        <Button id="payNow" type="submit">
+          Pay now
+        </Button>
       </ButtonContainer>
     </Form>
   );
