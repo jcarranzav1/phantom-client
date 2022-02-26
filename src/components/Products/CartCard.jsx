@@ -189,11 +189,11 @@ export const CartCard = ({ id, photo, model, price, quantity }) => {
           </ButtonIcon>
         </ButtonBottom>
       </ButtonContainer>
-      <Link to={`/products/${id}`}>
-        <ImgContainer>
-          <Imagen alt="product" src={photo} />
-        </ImgContainer>
-      </Link>
+      {/*  <Link to={`/products/${id}`}> */}
+      <ImgContainer>
+        <Imagen alt="product" src={photo} />
+      </ImgContainer>
+      {/* </Link> */}
       <div style={{ flex: '1 1 0' }}>
         <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/products/${id}`}>
           <Model>{model}</Model>

@@ -285,9 +285,9 @@ export default function ProductCard2({ id, photo, model, price }) {
       <Wrapper>
         <ImageContainer>
           <div>
-            <Link to={`/products/${id}`}>
-              <Image src={photo} />
-            </Link>
+            {/* <Link to={`/products/${id}`}> */}
+            <Image src={photo} />
+            {/* </Link> */}
           </div>
         </ImageContainer>
         <BodyContainer>
