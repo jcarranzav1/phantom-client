@@ -85,7 +85,7 @@ const CartModal = ({ show, setShow }) => {
       </Top>
       <Bottom>
         <Button className="mb-3" id="cartCheckout" onClick={handleClick} large>
-          Checkout Now (${total})
+          Pay Now (${total})
         </Button>
         <Button id="viewCart" onClick={() => navigate('/shopcart')} large outline>
           View Cart
