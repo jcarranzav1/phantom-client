@@ -19,6 +19,7 @@ import Billing from './pages/Billing';
 import Payment from './pages/Payment';
 import Error from './pages/Error';
 import Order from './pages/Order';
+import OrderDetails from './pages/OrderDetails';
 
 function App() {
   return (
@@ -89,8 +90,19 @@ function App() {
               <Order />
             </UserPrivate>
           )}
-          path="/order"
+          path="/myOrders"
         />
+        <Route path="/order">
+          <Route
+            element={(
+              <UserPrivate>
+                <OrderDetails />
+              </UserPrivate>
+            )}
+            path=":orderId"
+          />
+        </Route>
+
         <Route
           element={(
             <UserPrivate>

@@ -21,3 +21,27 @@ export const myOrders = gql`
     }
   }
 `;
+
+export const orderById = gql`
+  query Order($orderId: ID!) {
+    order(id: $orderId) {
+      products {
+        product {
+          model
+          photo
+          category
+          price
+        }
+        quantity
+      }
+      billingAddress {
+        city
+        country
+        postalCode
+        line1
+      }
+      amount
+      createdAt
+    }
+  }
+`;

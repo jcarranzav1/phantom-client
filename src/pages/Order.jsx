@@ -90,7 +90,7 @@ const IndexName = styled.div`
 `;
 
 const IndexTitle = styled.div`
-  flex: 1 1 0px;
+  flex: 1 1 115px;
   margin-bottom: 0px;
   margin-top: 0px;
   font-size: 16px;
@@ -227,9 +227,7 @@ export default function Order() {
           <TitleWrapper>
             <TitleContent>
               <TitleIcon>
-                <path d="M13.4333 1.60733L4.3575 6.25399L0.75 4.47899L9.66583 0.0764941C9.86583 -0.0251725 10.1058 -0.0251725 10.3158 0.0764941L13.4333 1.60733Z" />{' '}
-                <path d="M19.2402 4.47912L10.0052 9.05412L6.54687 7.34995L6.04688 7.09579L15.1327 2.44995L15.6327 2.70328L19.2402 4.47912Z" />
-                <path d="M9.265 10.3726L9.255 20.0001L0.41 15.3843C0.16 15.2526 0 14.9884 0 14.7043V5.79761L3.74833 7.64427V10.8909C3.74833 11.3068 4.08833 11.6518 4.49833 11.6518C4.90833 11.6518 5.24833 11.3068 5.24833 10.8909V8.39511L5.74833 8.63844L9.265 10.3726Z" />
+                <path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8 4c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2zm2-6c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm4 6c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2z" />
                 <path d="M19.9889 5.80737L10.7639 10.3624L10.7539 19.9899L19.9989 15.1624L19.9889 5.80737Z" />
               </TitleIcon>
               <Title>My Orders</Title>
@@ -240,8 +238,8 @@ export default function Order() {
           <IndexNameContainer className="me-5">
             <IndexName>Order #</IndexName>
           </IndexNameContainer>
-          <IndexTitle style={{ marginLeft: '-80px' }}>Date purchased</IndexTitle>
-          <IndexTitle style={{ marginLeft: '80px' }}>Total</IndexTitle>
+          <IndexTitle>Date purchased</IndexTitle>
+          <IndexTitle>Total</IndexTitle>
         </IndexContainer>
         {orderArray.map((order) => (
           <OrderCart

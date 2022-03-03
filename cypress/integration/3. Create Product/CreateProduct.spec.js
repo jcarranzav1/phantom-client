@@ -72,5 +72,6 @@ Empaquetado
     cy.get('#nextArrow').click({ force: true });
     cy.get('#nextArrow').click({ force: true });
     cy.get('#nextArrow').click({ force: true });
+    cy.wait(3000);
   });
 });
