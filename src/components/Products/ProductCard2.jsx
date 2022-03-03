@@ -224,7 +224,7 @@ const SideWrapper = styled.div`
   ${minWidth(600, {
     display: 'flex',
   })}
-  
+
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -276,7 +276,6 @@ const CartSideContainer = styled.div`
 
 export default function ProductCard2({ id, photo, model, price }) {
   const { addProduct } = useCartActions();
-
   const handleAdd = () => {
     addProduct({ id, model, price, photo });
   };
@@ -285,14 +284,14 @@ export default function ProductCard2({ id, photo, model, price }) {
       <Wrapper>
         <ImageContainer>
           <div>
-            {/* <Link to={`/products/${id}`}> */}
-            <Image src={photo} />
-            {/* </Link> */}
+            <Link to={`/product/${id}`}>
+              <Image src={photo} />
+            </Link>
           </div>
         </ImageContainer>
         <BodyContainer>
           <BodyWrapper>
-            <Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/products/${id}`}>
+            <Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/product/${id}`}>
               <Model>{model}</Model>
             </Link>
             <RatingContainer>

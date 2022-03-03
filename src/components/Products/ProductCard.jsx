@@ -25,7 +25,7 @@ const Container = styled.div`
     flexGrow: 0,
     maxWidth: '33.3333%',
   })}
-  
+
   ${minWidth(1280, {
     flexBasis: '25%',
     flexGrow: 0,
@@ -194,7 +194,7 @@ export default function ProductCard({ id, photo, model, price }) {
         <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
           <ImageContainer>
             <ImageWrapper />
-            <Link to={`/products/${id}`}>
+            <Link to={`/product/${id}`}>
               <Image src={photo} />
             </Link>
           </ImageContainer>
@@ -202,7 +202,7 @@ export default function ProductCard({ id, photo, model, price }) {
         <div style={{ padding: '1rem', paddingTop: '2rem' }}>
           <div className="d-flex">
             <div style={{ flex: '1 1 0', minWidth: '0%', marginRight: '8px' }}>
-              <Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/products/${id}`}>
+              <Link style={{ color: 'inherit', textDecoration: 'none' }} to={`/product/${id}`}>
                 <Model>{model}</Model>
               </Link>
               <PriceContainer>

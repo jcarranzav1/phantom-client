@@ -52,7 +52,7 @@ const Items1 = styled.div`
     flexGrow: 0,
     maxWidth: '50%',
   })}
-  
+
   ${minWidth(1280, {
     flexBasis: '33.333333%',
     flexGrow: 0,
@@ -79,7 +79,7 @@ const Items2 = styled.div`
     flexGrow: 0,
     maxWidth: '50%',
   })}
-  
+
   ${minWidth(1280, {
     flexBasis: '25%',
     flexGrow: 0,
@@ -105,7 +105,7 @@ const Items3 = styled.div`
     flexGrow: 0,
     maxWidth: '50%',
   })}
-  
+
   ${minWidth(1280, {
     flexBasis: '16.666667%',
     flexGrow: 0,
@@ -156,7 +156,7 @@ export default function Footer() {
     <footer>
       <div style={{ backgroundColor: '#0c0e30' }}>
         <Container>
-          <div style={{ paddingTop: '80px', paddingBottom: '80px', overflow: 'hidden' }}>
+          <div style={{ paddingTop: '40px', paddingBottom: '40px', overflow: 'hidden' }}>
             <Wrapper>
               <Items1>
                 <Link style={{ textDecoration: 'none', color: 'white' }} to="/">

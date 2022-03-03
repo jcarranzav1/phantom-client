@@ -99,7 +99,9 @@ export default function OrderCart({ id, createdAt, amount }) {
       <ModelContainer onClick={() => navigate(`/order/${id}`)}>
         <Model>{id.slice(0, 11)}</Model>
       </ModelContainer>
-      <Values onClick={() => navigate(`/order/${id}`)}>{format(new Date(parseInt(createdAt, 10)), 'dd MMM yyyy')}</Values>
+      <Values onClick={() => navigate(`/order/${id}`)}>
+        {format(new Date(parseInt(createdAt, 10)), 'dd MMM yyyy')}
+      </Values>
       <Values onClick={() => navigate(`/order/${id}`)}>${amount.toFixed(2)}</Values>
       <ButtonContainer>
         <EditButton onClick={() => navigate(`/order/${id}`)}>

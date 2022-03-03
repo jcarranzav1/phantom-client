@@ -20,6 +20,7 @@ import Payment from './pages/Payment';
 import Error from './pages/Error';
 import Order from './pages/Order';
 import OrderDetails from './pages/OrderDetails';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -31,8 +32,12 @@ function App() {
         <Route path="/products">
           <Route element={<SearchPage />} path="search" />
           <Route element={<Categories />} path=":category" />
-          {/* <Route element={<Home />} path=":id" /> */}
         </Route>
+
+        <Route path="/product">
+          <Route element={<ProductDetail />} path=":id" />
+        </Route>
+
         <Route element={<Cart />} path="/shopcart" />
         <Route
           element={(

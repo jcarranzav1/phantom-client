@@ -56,7 +56,7 @@ const IndexContainer = styled.div`
   ${minWidth(600, {
     display: 'flex',
   })}
-  
+
   color: rgb(43, 52, 69);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   box-shadow: none;
@@ -241,14 +241,17 @@ export default function Order() {
           <IndexTitle>Date purchased</IndexTitle>
           <IndexTitle>Total</IndexTitle>
         </IndexContainer>
-        {orderArray.map((order) => (
-          <OrderCart
-            key={uuidv4()}
-            amount={order.amount}
-            createdAt={order.createdAt}
-            id={order.id}
-          />
-        ))}
+        <div id="orderContainer">
+          {orderArray.map((order) => (
+            <OrderCart
+              key={uuidv4()}
+              amount={order.amount}
+              createdAt={order.createdAt}
+              id={order.id}
+            />
+          ))}
+        </div>
+
         <ButtonContainer>
           <div>
             <List>

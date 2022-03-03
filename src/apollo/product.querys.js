@@ -52,3 +52,16 @@ export const updateProduct = gql`
     }
   }
 `;
+
+export const productByID = gql`
+  query Product($productId: ID!) {
+    product(id: $productId) {
+      model
+      price
+      category
+      description
+      photo
+      id
+    }
+  }
+`;
